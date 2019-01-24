@@ -1,0 +1,10 @@
+service: # 微服务配置
+  name: RestProviderDemo
+  version: 1.0.0
+  appId: default
+instance: # 实例信息
+  hostname: rest-provider-demo
+  protocol: rest
+  listenAddress: 127.0.0.1:8081 #实例监听地址
+registry:
+  address: http://127.0.0.1:30100 # service-center 地址

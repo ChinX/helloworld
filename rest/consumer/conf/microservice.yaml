@@ -1,0 +1,10 @@
+service: # 微服务配置
+  name: RestConsumerDemo
+  version: 1.0.0
+  appId: default
+registry:
+  address: http://127.0.0.1:30100 # service-center 地址
+provider: # 服务端信息
+  name: RestProviderDemo
+  appId: default
+  version: 1.0.0

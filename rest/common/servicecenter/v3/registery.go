@@ -16,7 +16,9 @@ import (
 var (
 	// 接口 API 定义
 	microServices = "/registry/v3/microservices"
+	microServiceItem = "/registry/v3/microservices/%s"
 	svcInstances  = "/registry/v3/microservices/%s/instances"
+	svcInstanceItem  = "/registry/v3/microservices/%s/instances/%s"
 	discovery     = "/registry/v3/instances"
 	existence     = "/registry/v3/existence"
 	heartbeats    = "/registry/v3/heartbeats"
@@ -87,6 +89,19 @@ func (c *Client) RegisterService(svc *config.ServiceConf) (string, error) {
 	return "", fmt.Errorf("[RegisterService]: %s", err)
 }
 
+// 注销微服务
+func (c *Client) UnRegisterService(svcID string) error {
+	reqURL := c.rawURL + fmt.Sprintf(microServiceItem, svcID)
+	req, err := restful.NewRequest(http.MethodDelete, reqURL, c.DefaultHeaders(), nil)
+	if err == nil {
+		err = restful.DoRequest(req, nil)
+		if err == nil {
+			return nil
+		}
+	}
+	return fmt.Errorf("[UNRegisterService]: %s", err)
+}
+
 // 注册微服务实例
 func (c *Client) RegisterInstance(svcID string, ins *config.InstanceConf) (string, error) {
 	endpoint := ins.Protocol + "://" + ins.ListenAddress
@@ -107,6 +122,19 @@ func (c *Client) RegisterInstance(svcID string, ins *config.InstanceConf) (strin
 		}
 	}
 	return "", fmt.Errorf("[RegisterInstance]: %s", err)
+}
+
+// 注销微服务实例
+func (c *Client) UnRegisterInstance(svcID , insID string) (error) {
+	reqURL := c.rawURL + fmt.Sprintf(svcInstanceItem, svcID, insID)
+	req, err := restful.NewRequest(http.MethodDelete, reqURL, c.DefaultHeaders(), nil)
+	if err == nil {
+		err = restful.DoRequest(req, nil)
+		if err == nil {
+			return nil
+		}
+	}
+	return fmt.Errorf("[UNRegisterInstance]: %s", err)
 }
 
 // 心跳保活
